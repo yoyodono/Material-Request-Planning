@@ -1,0 +1,63 @@
+	
+
+
+<h1>Setting</h1>
+	<table class="no_border">
+	<th rowspan="2">Jenis</th>
+	<th colspan="<%= @periode+1 %>"><%= @schedulling.bom.name %> | On-Hand:<%= @schedulling.bom.item.stock %></th></tr>
+	<% @periode.times do |i|%>
+		<th style="width:2%;">P-<%= i+1 %></th>
+	<% end %>
+	</tr>
+		<!--GR-->
+		<td style="width:2%; text-align:center;">GR</td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "GR", :bom_id => @schedulling.bom.id, :entry_id => nil}).details.each do |i|%>
+			<%= fields_for'schedulling[i][]',i do |period| %>
+				<td style="width:2%; text-align:center;"><%= period.text_field :quantity, :style=>'width: 3em;' %></td>
+			<% end %>
+		<% end %>	
+		</tr>
+		<!--SR-->
+		<td style="width:2%; text-align:center;">SR</td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "SR", :bom_id => @schedulling.bom.id, :entry_id => nil}).details.each do |i|%>
+			<%= fields_for'schedulling[i][]',i do |period| %>
+				<td style="width:2%; text-align:center;"><%= period.text_field :quantity, :style=>'width: 3em;' %></td>
+			<% end %>
+		<% end %>	
+		</tr>		
+	</table>	
+	<br />
+	
+	
+	<% @schedulling.bom.details.each do |entry| %>	
+		<table class="no_border">
+		<th rowspan="2">Jenis</th>
+		<th colspan="<%= @periode+1 %>"><%= entry.item.name %> | On-Hand:<%= entry.item.stock %></th></tr>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+			<th style="width:2%;">P-<%= i.period %></th>
+		<% end %>
+		</tr>
+		<!--GR-->
+		<td style="width:2%; text-align:center;">GR</td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "GR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+			<%= fields_for'schedulling[i][]',i do |period| %>
+				<td style="width:2%; text-align:center;"><%= period.text_field :quantity, :style=>'width: 3em;' %></td>
+			<% end %>
+		<% end %>	
+		</tr>
+		<!--SR-->
+		<td style="width:2%; text-align:center;">SR</td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "SR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+			<%= fields_for'schedulling[i][]',i do |period| %>
+				<td style="width:2%; text-align:center;"><%= period.text_field :quantity, :style=>'width: 3em;' %></td>
+			<% end %>
+		<% end %>	
+		</tr>		
+		</table>
+		<br />
+	<% end %>
+	
+	
+
+
+

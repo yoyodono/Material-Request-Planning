@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :all %>
+  
+  <%= csrf_meta_tag %>
+	
+
+<title>Sistem Informasi MRP - Produksi AMDK Ewiti</title></head>
+
+<body>
+<!-- wrap starts here -->
+<div id="wrap">
+
+		<!-- header -->
+		<div id="header">	
+	
+		</div>
+		
+		<div id="header-logo">			
+			
+			<div id="logo"><a href="#">Sistem <span class="red">Informasi</span> MRP</a></div>		
+						
+		</div>	
+		
+
+		<div id="sidebar" style="position:absolute;top:-10px;z-index:111;right:50px;">							
+			
+			<h1>Main Menu</h1>
+			<div class="left-box">
+				<ul class="sidemenu" style="width:218px">
+					<li><%= link_to 'Bill Of Material', boms_path %></li>
+					<li><%= link_to 'Items', items_path %></li>
+					<li><%= link_to 'Schedulling', schedullings_path %></li>
+				</ul>	
+			</div>
+				
+		</div>	
+
+
+</head>
+<body>
+
+
+		<div id="main" style="position:relative;">
+			
+		<%= yield %>
+         
+											
+		</div>	
+<!-- wrap ends here -->
+</div>
+		
+<!-- footer starts here -->
+<div class="footer">
+	
+		<p>&copy; 2012 <strong>KotaPahlawan System Solution</strong> &nbsp;&nbsp;	 
+		Design by: <a href="http://www.styleshout.com/">styleshout</a> | 
+		Valid <a href="http://validator.w3.org/check/referer">XHTML</a> |
+   	<a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
+		</p>
+		
+</div>	
+	
+</body></html>
+

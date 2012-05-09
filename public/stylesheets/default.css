@@ -1,0 +1,44 @@
+/* PHP File Tree Default Theme
+
+	By Cory LaViska (http://abeautifulsite.net/)
+	Featuring the Silk Icon Set from famfamfam (http://www.famfamfam.com/lab/icons/silk/)
+
+*/
+
+.php-file-tree {
+	font-family: monospace;
+	font-size: 12px;
+	letter-spacing: 1px;	line-height: 1.0;
+}
+
+	.php-file-tree a {
+		color: #000000;
+		text-decoration: none;
+		position: relative;
+		top:-5px;
+		z-index: 199;
+	}
+	
+	.php-file-tree A:hover {
+		color: #666666;
+	}
+
+	.php-file-tree .open {
+		font-style: italic;
+	}
+	
+	.php-file-tree .closed {
+		font-style: normal;
+	}
+	
+	.php-file-tree .pft-directory {
+		list-style-image: url(../images/closed.gif);
+	}
+	
+	/* Default file */
+	.php-file-tree li.pft-file { list-style-image: url(../images/final.gif); 
+   }
+	/* Additional file types */
+
+	/* You can add millions of these... */
+

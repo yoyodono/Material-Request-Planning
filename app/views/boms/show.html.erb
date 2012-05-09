@@ -1,0 +1,56 @@
+<h1>Show Bill of Material</h1>
+
+|<%= link_to 'Edit', edit_bom_path(@bom) %>|
+<%= link_to 'Back', boms_path %>| <br />
+<form style="float:left; width:40em;">
+<h1>Item Detail</h1>
+<p id="notice"><%= notice %></p>
+<p>
+  <b>Name:</b>
+  <%= @bom.name %>
+</p>
+
+<p>
+  <b>End Product:</b>
+  <%= @bom.item.name %>
+</p>
+
+  	<h2>Formula Components</h2>
+  	<table style="width:80%;">
+  		<th>Item Material</th><th>Quantity</th><th>Satuan</th></tr>  
+  	</table>	  		  	
+
+	<table class ="no_border" style="width:80%;">
+  		<% @bom.details.each do |entry| %>	
+	  		<td style="width:30%;"><%= entry.item.name %></td>
+  			<td style="width:10%;"><%= entry.quantity %></td>
+  			<td style="width:10%;"><%= entry.item.satuan %></td></tr>	
+  		<% end %>
+  	</table>
+</form>
+
+<form style="float:right; width:40em;">  	
+<h1>Tree View</h1>
+	<ul class="php-file-tree">
+		<li class="pft-directory"><%= link_to @bom.name, @bom.item %>
+		<% @bom.details.each do |entry| %>
+		<ul style="width:420px">
+			<% if Bom.where(:item_id => entry.item.id).exists? %>
+				<li class="pft-directory"><a href="#"><%= link_to entry.item.name, entry.item %> (<%= entry.quantity %>)
+					<% Bom.first(:conditions => {:item_id => entry.item.id}).details.each do |e| %>											
+						<ul style="width:420px">
+							<li class="pft-file ext-exe"><%= link_to e.item.name, e.item %>	(<%= e.quantity %>)</li>
+						</ul>
+					<% end %>
+			<% else %>
+			<li class="pft-file ext-exe"><%= link_to entry.item.name, entry.item %> (<%= entry.quantity %>) </li>
+			<% end %>					
+		</ul>
+	<% end %>
+	</li>
+</ul>
+
+  		
+</form>
+
+

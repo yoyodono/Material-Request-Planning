@@ -1,0 +1,27 @@
+<h1>Listing schedullings</h1>
+
+<table>
+  <tr>
+    <th>Bom</th>
+    <th>Periode</th>
+    <th>Tipe</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @schedullings.each do |schedulling| %>
+  <tr>
+    <td><%= schedulling.bom.item.name %></td>
+    <td><%= schedulling.periode %></td>
+    <td><%= schedulling.tipe %></td>
+    <td><%= link_to 'Show', schedulling %></td>
+    <td><%= link_to 'Setting', edit_schedulling_path(schedulling) %></td>
+    <td><%= link_to 'Destroy', schedulling, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Schedulling', new_schedulling_path %>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  bom_id: 1
+  item_id: 1
+  periode: 1
+  tipe: MyString
+
+two:
+  bom_id: 1
+  item_id: 1
+  periode: 1
+  tipe: MyString

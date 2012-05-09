@@ -1,0 +1,17 @@
+<div class="detail">
+<table class ="no_border" style="width:50%;">
+  <%= fields_for_detail(detail) do |detail_form| %>	
+  	<td style="width:30%;"><%= detail_form.select :item_id, Item.all(:conditions => {:material => "1"}).collect {|i| [ i.name, i.id ] }, { :include_blank => true }, :class => 'no_border' %>        </td>
+  	<td style="width:30%;"><%= detail_form.text_field :quantity, :width => "5em", :class => "no_border" %></td>
+  	<td style="width:20%;"><%= link_to_function "remove", "$(this).up('.detail').remove()" %></td></tr>
+  <% end %>
+  	</table>
+</div>
+
+   
+
+
+
+<!--
+
+-->

@@ -1,0 +1,18 @@
+<h1>Setting schedulling</h1>
+|<%= link_to 'Show', @schedulling %>|
+<%= link_to 'Back', schedullings_path %>| <br />
+
+<%= form_for(@schedulling) do |f| %>
+
+<%= render :partial => 'periode', :locals => { :f => f }%>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+
+
+
+
+

@@ -1,0 +1,239 @@
+<h1>Show Item</h1>
+<%= link_to 'Setting', edit_schedulling_path(@schedulling) %> |
+<%= link_to 'Back', schedullings_path %>
+
+<form>
+<h1>Scheduling Detail</h1>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Bom:</b>
+  <%= @schedulling.bom.item.name %>
+</p>
+
+<p>
+  <b>Periode:</b>
+  <%= @schedulling.periode %>
+</p>
+
+<p>
+  <b>Tipe:</b>
+  <%= @schedulling.tipe %>
+</p>
+</form>
+
+<form>
+<h1> Schedulling Example </h1>
+	<table class="no_border">
+	<th rowspan="2" >Jenis</th>
+	<% last_stock_bom = Array.new %>
+	<% last_NR = Array.new %>
+	<% holding_bom = Array.new 
+		holding_bom = 0.to_s.to_d
+	%>
+	<% setup_bom = Array.new 
+		setup_bom = 0.to_s.to_d
+		
+		holding_entry = Array.new
+		setup_entry = Array.new 
+	%>	
+	<% last_POREL_bom = Array.new %>
+	<% last_stock_bom[0] = @schedulling.bom.item.stock.to_s.to_d %>
+	<th colspan="<%= @periode+1 %>"><%= @schedulling.bom.name %> | On-Hand:<%= @schedulling.bom.item.stock.to_s.to_d %> | Lead-Time:<%= @schedulling.bom.item.lead_time %></th></tr>
+	<th style="width:2%;">P-0</th>
+	<% @periode.times do |i|%>
+		<th style="width:2%;">P-<%= i+1 %></th>
+	<% end %>
+	</tr>
+		<!--GR-->
+		<td style="width:2%; text-align:center;">GR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "GR", :bom_id => @schedulling.bom.id, :entry_id => nil}).details.each do |i|%>	
+				<td style="width:2%; text-align:center;"><%= i.quantity.to_s.to_d %></td>			
+		<% end %>	
+		</tr>
+		<!--SR-->
+		<td style="width:2%; text-align:center;">SR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "SR", :bom_id => @schedulling.bom.id, :entry_id => nil}).details.each do |i|%>
+				<td style="width:2%; text-align:center;"><%= i.quantity.to_s.to_d %></td>
+		<% end %>	
+		</tr>
+		<!--OH-->		
+		<td style="width:2%; text-align:center;">OH</td>
+		<td style="width:2%; text-align:center;"><%= @schedulling.bom.item.stock %></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id}).details.each do |i|%>		
+			<% @GR = SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :tipe_column => "GR", :entry_id => nil}).details.first(:conditions => {:period => i.period}).quantity.to_s.to_d
+			@SR = SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :tipe_column => "SR", :entry_id => nil}).details.first(:conditions => {:period => i.period}).quantity.to_s.to_d
+			hasil = Array.new
+			hasil[i.period] = @GR - @SR
+			last_stock_bom[i.period] = last_stock_bom[i.period-1] - hasil[i.period]			
+			if (last_stock_bom[i.period] < 0.to_s.to_d)				
+				last_NR[i.period] = 0 - last_stock_bom[i.period]		
+				last_stock_bom[i.period] = 0.to_s.to_d
+			else 
+				last_stock_bom[i.period] = last_stock_bom[i.period]
+				holding_bom = holding_bom + (last_stock_bom[i.period]*@schedulling.bom.item.holding.to_s.to_d)
+			end
+			%>		
+				<td style="width:2%; text-align:center;"><%= last_stock_bom[i.period] %></td>
+		<% end %>	
+		</tr>	
+		<!--NR-->		
+		<td style="width:2%; text-align:center;">NR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id}).details.each do |i|%>					
+			<%
+			if (last_NR[i.period].nil?)
+				last_NR[i.period] = 0.to_s.to_d
+			end
+			last_POREL_bom[i.period] = last_NR[i.period+@schedulling.bom.item.lead_time]
+			%>			
+				<td style="width:2%; text-align:center;"><%= last_NR[i.period] %></td>
+		<% end %>	
+		<tr />	
+		<!--POR-->		
+		<td style="width:2%; text-align:center;">POR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id}).details.each do |i|%>					
+			<%
+			if (last_NR[i.period].nil?)
+				last_NR[i.period] = 0.to_s.to_d
+			end			
+			%>			
+				<td style="width:2%; text-align:center;"><%= last_NR[i.period] %></td>
+		<% end %>	
+		<tr />	
+		<!--POREL-->		
+		<td style="width:2%; text-align:center;">POREL</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id}).details.each do |i|%>					
+			<% 
+				if (last_POREL_bom[i.period].nil?)
+					last_POREL_bom[i.period] = 0.to_s.to_d
+				else 
+					setup_bom = setup_bom + @schedulling.bom.item.setup.to_s.to_d
+				end
+			%>	
+				<td style="width:2%; text-align:center;"><%= last_POREL_bom[i.period] %></td>
+		<% end %>	
+		<tr />												
+	</table>	
+	<br />
+	
+	
+	<% @schedulling.bom.details.each do |entry| %>	
+	<% last_stock_entry = Array.new %>
+	<% last_NR_entry = Array.new %>
+	<% last_POREL_entry = Array.new %>
+	<% holding_entry[entry.id] = 0.to_s.to_d %>
+	<% setup_entry[entry.id] = 0.to_s.to_d %>	
+	<% last_stock_entry[0] = entry.item.stock.to_s.to_d %>	
+		<table class="no_border">
+		<th rowspan="2">Jenis</th>
+		<th colspan="<%= @periode+1 %>"><%= entry.item.name %> | On-Hand:<%= entry.item.stock.to_s.to_d %> | Lead-Time:<%= entry.item.lead_time %></th></tr>
+		<th style="width:2%;">P-0</th>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+			<th style="width:2%;">P-<%= i.period %></th>
+		<% end %>
+		</tr>
+		
+		<!--GR-->		
+		<td style="width:2%; text-align:center;">GR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "GR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>						
+		<td style="width:2%; text-align:center;"><%= i.quantity.to_s.to_d+(last_POREL_bom[i.period]*entry.quantity) %></td>
+		<% end %>	
+		</tr>
+		
+		<!--SR-->		
+		<td style="width:2%; text-align:center;">SR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:tipe_column => "SR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+				<td style="width:2%; text-align:center;"><%= i.quantity.to_s.to_d %></td>
+		<% end %>	
+		</tr>	
+
+		<!--OH-->		
+		<td style="width:2%; text-align:center;">OH</td>
+		<td style="width:2%; text-align:center;"><%= entry.item.stock %></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>	
+			<% @GR = SchedullingPeriod.first(:conditions => {:tipe_column => "GR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.first(:conditions => {:period => i.period}).quantity.to_s.to_d
+			@SR = SchedullingPeriod.first(:conditions => {:tipe_column => "SR", :bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.first(:conditions => {:period => i.period}).quantity.to_s.to_d
+			hasil = Array.new
+			hasil[i.period] = @GR+(last_POREL_bom[i.period]*entry.quantity) - @SR
+			last_stock_entry[i.period] = last_stock_entry[i.period-1] - hasil[i.period]			
+			if (last_stock_entry[i.period] < 0.to_s.to_d)				
+				last_NR_entry[i.period] = 0 - last_stock_entry[i.period]		
+				last_stock_entry[i.period] = 0.to_s.to_d
+			else 
+				last_stock_entry[i.period] = last_stock_entry[i.period]
+				holding_entry[entry.id] = holding_entry[entry.id] + (last_stock_entry[i.period]*entry.item.holding.to_s.to_d)
+			end
+			%>			
+				<td style="width:2%; text-align:center;"><%= last_stock_entry[i.period] %></td>
+		<% end %>	
+		</tr>					
+		<!--NR-->		
+		<td style="width:2%; text-align:center;">NR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>					
+			<%
+			if (last_NR_entry[i.period].nil?)
+				last_NR_entry[i.period] = 0.to_s.to_d				
+			end
+			last_POREL_entry[i.period] = last_NR_entry[i.period+entry.item.lead_time]
+			%>			
+				<td style="width:2%; text-align:center;"><%= last_NR_entry[i.period] %></td>
+			<% end %>	
+			<tr />
+		<!--POR-->		
+		<td style="width:2%; text-align:center;">POR</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>			
+				<td style="width:2%; text-align:center;"><%= last_NR_entry[i.period] %></td>
+			<% end %>	
+			<tr />	
+		<!--POREL-->		
+		<td style="width:2%; text-align:center;">POREL</td>
+		<td style="width:2%; text-align:center;"></td>
+		<% SchedullingPeriod.first(:conditions => {:bom_id => @schedulling.bom.id, :entry_id => entry.id}).details.each do |i|%>
+			<% 
+				if (last_POREL_entry[i.period].nil?)
+					last_POREL_entry[i.period] = 0.to_s.to_d					
+				else 
+					setup_entry[entry.id] = setup_entry[entry.id] + entry.item.setup.to_s.to_d
+				end
+			%>	
+				<td style="width:2%; text-align:center;"><%= last_POREL_entry[i.period] %></td>
+		<% end %>	
+		<tr />										
+		</table>
+		<br />
+	<% end %>
+
+</form>
+
+<form>
+	<% total_cost_bom = Array.new 
+		total_cost_bom = 0.to_s.to_d
+	   total_cost_entry = Array.new 
+		total_cost_entry = 0.to_s.to_d	
+		inventory_cost = Array.new 
+	%>
+	<table>
+	<th>Item Name</th>
+	<th>Setup Cost</th>
+	<th>Holding Cost</th></tr>
+	<!--BOM-->
+		<td><%= @schedulling.bom.item.name %></td><td>Rp. <%= setup_bom %></td><td>Rp. <%= holding_bom %></td></tr>
+		<% total_cost_bom = total_cost_bom + setup_bom + holding_bom %>
+	<!--BOM ENTRY-->
+	<% @schedulling.bom.details.each do |entry| %>	
+		<td><%= entry.item.name %></td><td>Rp. <%= setup_entry[entry.id] %></td><td>Rp. <%= holding_entry[entry.id] %></td></tr>
+		<% total_cost_entry = total_cost_entry + setup_entry[entry.id] + holding_entry[entry.id]%>
+	<% end %>	
+	<% inventory_cost = total_cost_bom + total_cost_entry %>
+	<th>Inventory Cost</td><td colspan ="2">Rp. <%= inventory_cost %></td>
+	</table>
+</form>

@@ -1,0 +1,38 @@
+<%= form_for(@bom) do |f| %>
+  <% if @bom.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bom.errors.count, "error") %> prohibited this bom from being saved:</h2>
+
+      <ul>
+      <% @bom.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  
+  <div class="field">
+    <%= f.label "End Product" %>    
+    <%= select("bom", "item_id", Item.all(:conditions => {:assembly => "1"}).collect {|i| [ i.name, i.id ] }, { :include_blank => true }) %>        
+  </div>
+  <br />
+	<div id="details">
+  	<h2>Formula Components</h2>
+  	<table style="width:50%;">
+  		<th>Item Material</th><th>Quantity</th><th>Action</th></tr>  
+  	</table>	
+  		<%= render :partial => 'detail', :collection => @bom.details %>
+  	
+	</div>
+
+	<p><%= add_detail_link "Add a detail" %></p>
+
+  <br />
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

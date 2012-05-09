@@ -1,0 +1,35 @@
+
+
+
+<h1>Detail</h1>
+  <% if @schedulling.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@schedulling.errors.count, "error") %> prohibited this schedulling from being saved:</h2>
+
+      <ul>
+      <% @schedulling.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :bom_id %>
+    <%= select("schedulling", "bom_id", Bom.all.collect {|i| [ i.name, i.id ] }, { :include_blank => true }) %> 
+  </div>
+  <div class="field">
+    <%= f.label :periode %>
+    <%= f.text_field :periode %>
+  </div>
+  <div class="field">
+    <%= f.label :tipe %>
+    <%= f.select "tipe", options_for_select(%w{ --Pilihan-- L4L EOQ}, :selected => @schedulling.tipe) %>
+  </div>
+  
+
+
+
+
+
+

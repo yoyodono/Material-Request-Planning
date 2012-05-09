@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  schedulling_period_id: 1
+  period: 1
+  quantity: 1
+
+two:
+  schedulling_period_id: 1
+  period: 1
+  quantity: 1

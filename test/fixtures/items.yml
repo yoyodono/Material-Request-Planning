@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  satuan: MyString
+  assembly: MyString
+  material: MyString
+
+two:
+  name: MyString
+  satuan: MyString
+  assembly: MyString
+  material: MyString

@@ -1,0 +1,41 @@
+<h1>Show Item</h1>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>
+
+<form>
+<p id="notice"><%= notice %></p>
+<p>
+  <b>Name:</b>
+  <%= @item.name %>
+</p>
+
+<p>
+  <b>Satuan:</b>
+  <%= @item.satuan %>
+</p>
+
+<p>
+  <b>Lead Time:</b>
+  <%= @item.lead_time %>
+</p>
+
+<p>
+  <b>Stock:</b>
+  <%= @item.stock %>
+</p>
+
+<p>
+  <b>Setup Cost:</b>
+  Rp. <%= @item.setup %>
+</p>
+
+<p>
+  <b>Holding Cost:</b>
+  Rp. <%= @item.holding %> / item / periode
+</p>
+<p>
+</p>
+</form>
+
+

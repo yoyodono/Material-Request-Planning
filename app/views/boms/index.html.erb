@@ -1,0 +1,23 @@
+<h1>Listing Bill Of Material</h1>
+|<%= link_to 'New Bom', new_bom_path %>|
+<table>
+  <tr>
+    <th>Name</th>
+    <th>End Product</th>
+    <th colspan ="3">Action</th>
+  </tr>
+
+<% @boms.each do |bom| %>
+  <tr>
+    <td><%= bom.name %></td>
+    <td><%= bom.item.name %></td>
+    <td><%= link_to 'Show', bom %></td>
+    <td><%= link_to 'Edit', edit_bom_path(bom) %></td>
+    <td><%= link_to 'Destroy', bom, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+

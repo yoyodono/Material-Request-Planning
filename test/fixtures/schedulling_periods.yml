@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  schedulling_id: 1
+  tipe_column: MyString
+
+two:
+  schedulling_id: 1
+  tipe_column: MyString
